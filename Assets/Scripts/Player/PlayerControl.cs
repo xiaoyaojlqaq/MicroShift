@@ -33,6 +33,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private ParticleSystem jumpEffect;
 
     private Rigidbody2D body;
+    Animator animator;
     private InputManager inputManager;
     private Vector3 initialScale;
     [SerializeField]private float facingDirection;
@@ -59,6 +60,7 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         initialScale = transform.localScale;
         isInOriginScene = true;
         facingDirection = Mathf.Sign(initialScale.x);
@@ -131,7 +133,7 @@ public class PlayerControl : MonoBehaviour
     {
         ShapeShiftTimeReStore();
         BodyShapeShiftUpdated();
-
+        animator.SetFloat("speed", Mathf.Abs(pendingMovement.x));
     }
 
     private void FixedUpdate()
@@ -145,6 +147,7 @@ public class PlayerControl : MonoBehaviour
 
         if (jumpRequested && isInGround)
         {
+            animator.SetTrigger("JumpTrigger");
             jumpRequested = false;
             body.AddForce(Vector2.up * currJumpForce * currBodyShapeNumShiftScale, ForceMode2D.Impulse);
         }
@@ -247,6 +250,7 @@ public class PlayerControl : MonoBehaviour
             currJumpForce = Mathf.Clamp(currJumpForce, jumpForce, strengthJumpForce);
             isStrengthJump = true;
             jumpEffect.Stop();
+            animator.SetTrigger("StrengthJump2");
             canMove = true;
         }
     }
@@ -262,11 +266,13 @@ public class PlayerControl : MonoBehaviour
                 currJumpForce = Mathf.Clamp(currJumpForce, jumpForce, strengthJumpForce);
                 isStrengthJump = true;
                 jumpEffect.Stop();
+                animator.SetTrigger("StrengthJump2");
                 canMove = true;
             }
         }
         if (context.interaction is TapInteraction)
         {
+            animator.SetTrigger("StrengthJump");
             jumpEffect.Play();
             canMove = false;
         }
@@ -342,6 +348,7 @@ public class PlayerControl : MonoBehaviour
     public void Time_spaceShift(InputAction.CallbackContext ctx) 
     {
         Time_spaceShift(shiftScene, shiftPos);
+        TimeSpaceShiftShaderControl.instance.isPlay = true;
     }
     public void Time_spaceShift(int shiftScene, Vector2 shiftPosition)
     {

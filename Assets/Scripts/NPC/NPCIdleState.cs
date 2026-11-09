@@ -14,16 +14,17 @@ public class NPCIdleState : INPCState
     
     public void EnterState()
     {
+        control.animator.SetBool("isRun", false);
         control.rigidbody.velocity = Vector2.zero;
         coroutine = control.StartCoroutine(IdleStateStay());
     }
 
     public void UpdateState()
     {
-        if(control.DialogueTrigger())
-        {
-            control.SwitchState(StateType.Dialogue);
-        }
+        //if(control.DialogueTrigger())
+        //{
+        //    control.SwitchState(StateType.Dialogue);
+        //}
     }
 
     public void ExitState()

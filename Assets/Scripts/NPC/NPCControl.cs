@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 
 public class NPCControl : MonoBehaviour
 {
@@ -23,6 +25,17 @@ public class NPCControl : MonoBehaviour
     [HideInInspector]public Collision2D colledExistOB;
     [HideInInspector]public Collider2D triggeredEnterOB;
     [HideInInspector]public Collider2D triggeredExistOB;
+
+    public Transform canvas;
+
+    public string[] localizationTable;
+
+    public int currLocalizationTable;
+
+    [HideInInspector]public bool isEnterDialogue;
+    [HideInInspector] public LocalizeStringEvent stringEvent;
+    [HideInInspector]public Animator animator;
+
     private void Awake()
     {
         states = new Dictionary<StateType, INPCState>()
@@ -33,6 +46,8 @@ public class NPCControl : MonoBehaviour
         };
 
         rigidbody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        stringEvent = GetComponent<LocalizeStringEvent>();
     }
     // Start is called before the first frame update
     void Start()
@@ -44,6 +59,7 @@ public class NPCControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        canvas.position = transform.position;
         DialogueTrigger();
         currState.UpdateState();
     }

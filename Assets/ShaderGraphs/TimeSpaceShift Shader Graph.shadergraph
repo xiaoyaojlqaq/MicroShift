@@ -230,9 +230,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0,
+        "r": 0.5232189297676086,
+        "g": 0.7624573111534119,
+        "b": 0.8993710279464722,
         "a": 1.0
     },
     "isMainColor": false,
@@ -516,10 +516,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -669.333251953125,
-            "y": 306.66668701171877,
-            "width": 184.6666259765625,
-            "height": 251.99993896484376
+            "x": -681.333251953125,
+            "y": 321.33331298828127,
+            "width": 209.33331298828126,
+            "height": 436.00006103515627
         }
     },
     "m_Slots": [
@@ -552,7 +552,7 @@
         "tex2d"
     ],
     "m_Precision": 0,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -695,10 +695,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1564.666748046875,
-            "y": 449.3333740234375,
-            "width": 118.0,
-            "height": 36.0
+            "x": -1374.66650390625,
+            "y": 443.33331298828127,
+            "width": 117.9998779296875,
+            "height": 36.000030517578128
         }
     },
     "m_Slots": [
@@ -828,10 +828,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1268.666748046875,
-            "y": 359.3333435058594,
-            "width": 167.3333740234375,
-            "height": 168.00009155273438
+            "x": -1076.6666259765625,
+            "y": 354.66668701171877,
+            "width": 209.333251953125,
+            "height": 351.99993896484377
         }
     },
     "m_Slots": [
@@ -853,7 +853,7 @@
     ],
     "synonyms": [],
     "m_Precision": 0,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -954,7 +954,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Strength",
     "m_StageCapability": 3,
-    "m_Value": 0.0,
+    "m_Value": 9.260000228881836,
     "m_DefaultValue": 10.0,
     "m_Labels": []
 }

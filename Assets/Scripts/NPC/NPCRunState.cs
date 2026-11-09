@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class NPCRunState : INPCState
@@ -15,17 +17,18 @@ public class NPCRunState : INPCState
 
     public void EnterState()
     {
+        direction = (Random.Range(-1f, 1f)) >= 0 ? 1 : -1;
+        control.animator.SetBool("isRun", true);
         isChangeDir = false;
         coroutine = control.StartCoroutine(Timer());
-        direction = ((float)Random.Range(-2, 2)) > 0 ? 1 : -1;
     }
 
     public void UpdateState()
     {
-        if (control.DialogueTrigger())
-        {
-            control.SwitchState(StateType.Dialogue);
-        }
+        //if (control.DialogueTrigger())
+        //{
+        //    control.SwitchState(StateType.Dialogue);
+        //}
         Run();
     }
 
@@ -47,17 +50,20 @@ public class NPCRunState : INPCState
         {
             isChangeDir = true;
             control.rigidbody.velocity = new Vector2(control.runSpeed, control.rigidbody.velocity.y);
+            control.transform.localScale = Vector2.one;
         }
         else if(control.transform.position.x > control.runRange[1].position.x)
         {
             isChangeDir = true;
             control.rigidbody.velocity = new Vector2(-control.runSpeed, control.rigidbody.velocity.y);
+            control.transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
             if (!isChangeDir)
             {
                 control.rigidbody.velocity = new Vector2(direction * control.runSpeed, control.rigidbody.velocity.y);
+                control.transform.localScale = new Vector3(direction, 1, 1);
             }
         }
     }

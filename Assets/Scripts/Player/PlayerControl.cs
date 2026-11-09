@@ -1,11 +1,15 @@
+using DG.Tweening;
 using System.Xml.Serialization;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerControl : MonoBehaviour
@@ -44,6 +48,7 @@ public class PlayerControl : MonoBehaviour
 
     public bool isInGround;
     private bool isBodyShifted;
+    bool isChangingBody;
     private bool jumpRequested;
     private bool inputsBound;
     private bool isStrengthJump;
@@ -57,6 +62,11 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]private int shiftScene;
 
     bool isInOriginScene;
+
+    [HideInInspector]public bool isEnterDialogue;
+
+    public GameObject DialogueImage;
+    [HideInInspector]public LocalizeStringEvent stringEvent;
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -89,9 +99,11 @@ public class PlayerControl : MonoBehaviour
 
     private void Start()
     {
+
         canMove = true;
         currJumpForce = jumpForce;
         currShapeShiftTime = maxShapeShiftTime;
+        stringEvent = GetComponent<LocalizeStringEvent>();
         BindInput();
         if (inputManager == null)
         {
@@ -284,11 +296,13 @@ public class PlayerControl : MonoBehaviour
     {
         shapeShiftTimeBar.gameObject.SetActive(true);
         isBodyShifted = true;
+        isChangingBody = true;
         ApplyScale();
     }
     private void BodyShapeShiftCanceled(InputAction.CallbackContext context)
     {
         isBodyShifted = false;
+        isChangingBody = true;
         ApplyScale();
     }
     private void BodyShapeShiftUpdated()
@@ -323,10 +337,27 @@ public class PlayerControl : MonoBehaviour
     {
         currBodyShapeNumShiftScale = isBodyShifted ? bodyShapeNumShiftScale : 1f;
         float shapeScale = isBodyShifted ? bodyShapeShiftScale : 1f;
-        transform.localScale = new Vector3(
-            Mathf.Abs(initialScale.x) * facingDirection * shapeScale,
-            initialScale.y * shapeScale,
-            initialScale.z);
+        if (!isChangingBody)
+        {
+            transform.localScale = new Vector3(
+                Mathf.Abs(initialScale.x) * facingDirection * shapeScale,
+                initialScale.z * shapeScale,
+                initialScale.z);
+        }
+        else
+        {
+            transform.localScale= new Vector3(
+                Mathf.Abs(transform.localScale.x) * facingDirection,
+                transform.localScale.y,
+                initialScale.z);
+            transform.DOScale(new Vector3(Mathf.Abs(initialScale.x) * facingDirection * shapeScale,
+                initialScale.z * shapeScale,
+                initialScale.z), 0.2f).OnComplete(() =>
+                {
+                    isChangingBody = false;
+                });
+            
+        }
     }
 
     private void PlayMoveEffect()
@@ -347,27 +378,37 @@ public class PlayerControl : MonoBehaviour
 
     public void Time_spaceShift(InputAction.CallbackContext ctx) 
     {
-        Time_spaceShift(shiftScene, shiftPos);
-        TimeSpaceShiftShaderControl.instance.isPlay = true;
+        if (TimeSpaceShiftShaderControl.instance.playable.state == UnityEngine.Playables.PlayState.Playing) return;
+        TimeSpaceShiftShaderControl.instance.PlayAnima();
+        StartCoroutine(Time_spaceShiftDelay());
     }
+    
     public void Time_spaceShift(int shiftScene, Vector2 shiftPosition)
     {
         if (isInOriginScene)
         {
             originPos = new Vector2(transform.position.x, transform.position.y);
-            originScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            originScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(shiftScene);
             transform.position = shiftPosition;
         }
         else
         {
             shiftPos = new Vector2(transform.position.x, transform.position.y);
-            this.shiftScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            this.shiftScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(originScene);
             transform.position = originPos;
         }
         isInOriginScene = !isInOriginScene;
     }
+
+    IEnumerator Time_spaceShiftDelay()
+    {
+        yield return new WaitForSeconds(3);
+        Time_spaceShift(shiftScene, shiftPos);
+
+    }
+
     private void OnValidate()
     {
         // Keep a zero or negative shape scale from making the player disappear in play mode.

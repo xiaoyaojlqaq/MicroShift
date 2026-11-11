@@ -17,8 +17,18 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9c8b787ebda286445bab97806bdde31a
   m_SerializeEntries:
+  - m_GUID: 09d6258ae86fb874e9b433c26db58219
+    m_Address: Assets/Language/Table/Choose1 Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 945ed2e87a6d2344882f44095413081a
     m_Address: Assets/Language/New Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3d76eb3a2fa4e540b9629e6586790ec
+    m_Address: Assets/Language/Table/Choose2 Table Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

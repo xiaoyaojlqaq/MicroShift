@@ -28,7 +28,7 @@ public class NPCControl : MonoBehaviour
 
     public Transform canvas;
 
-    public string[] localizationTable;
+    public DialogueInfo[] localizationTable;
 
     public int currLocalizationTable;
 

@@ -22,12 +22,13 @@ public class PlayerTrigger : MonoBehaviour
             Debug.Log("enter");
             playerControl.isEnterDialogue = true;
             NPCControl nPCControl = collision.GetComponentInParent<NPCControl>();
-            DialogueManager.InitLocatization(nPCControl.localizationTable[nPCControl.currLocalizationTable], playerControl, nPCControl);
             nPCControl.SwitchState(StateType.Dialogue);
             nPCControl.isEnterDialogue = true;
             action = (InputAction.CallbackContext ctx) =>
             {
-                DialogueManager.DialogueShow(nPCControl.localizationTable[nPCControl.currLocalizationTable], playerControl, nPCControl);
+                DialogueManager.intance.DialogueShow(nPCControl.localizationTable[nPCControl.currLocalizationTable],
+                    playerControl, 
+                    nPCControl);
             };
             InputManager.Instance.InteractPerformed += action;
         }
